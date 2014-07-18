@@ -1,6 +1,23 @@
 apply plugin: 'scala'
 apply plugin: 'idea'
-apply plugin: 'application'
+apply plugin: 'war'
+
+configurations {
+    provided // provided scope
+    container // group for jetty container used to run webapp from ./gradlew jettyRun
+}
+
+// add provided scope to source compilation
+sourceSets {
+    main { 
+        compileClasspath += configurations.provided 
+        runtimeClasspath += configurations.provided
+    }
+    test { 
+        compileClasspath += configurations.provided 
+        runtimeClasspath += configurations.provided
+    }
+}
 
 repositories
 {
@@ -8,17 +25,29 @@ repositories
 }
 
 dependencies {
+    // scala! 
     compile group: 'org.scala-lang', name: 'scala-library', version: '2.10'
 
+    // scalatra deps
     compile group: 'org.scalatra', name: 'scalatra_2.10', version: '2.3.0'
     compile group: 'org.scalatra', name: 'scalatra-scalate_2.10', version: '2.3.0'
 
-    compile group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '9.1.3.v20140225'
-    compile group: 'org.eclipse.jetty.orbit', name: 'javax.servlet', version: '3.0.0.v201112011016'
+    // container used to run from gradle
+    container group: 'org.eclipse.jetty', name: 'jetty-runner', version: '9.2.1.v20140609'
+
+    // servlet api
+    provided group: 'org.eclipse.jetty.orbit', name: 'javax.servlet', version: '3.0.0.v201112011016'
 }
 
+// manually specify gradle version for gradlew
 task wrapper(type: Wrapper) {
     distributionUrl = "http://services.gradle.org/distributions/gradle-2.0-bin.zip" 
 }
 
+// runs jetty 
+task jettyRun(type: JavaExec) {
+    main = "org.eclipse.jetty.runner.Runner"
+    args = [war.archivePath]
+    classpath configurations.container
+}
 
