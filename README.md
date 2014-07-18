@@ -16,3 +16,8 @@ Running locally in jetty
 ```
 ./gradlew jettyRun
 ```
+
+Todo:
+=====
+
+ * create own jetty launcher 
