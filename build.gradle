@@ -1,6 +1,10 @@
 apply plugin: 'scala'
 apply plugin: 'idea'
 apply plugin: 'war'
+apply plugin: 'application'
+
+// jetty runner class
+mainClassName = 'org.eclipse.jetty.runner.Runner'
 
 configurations {
     provided // provided scope
@@ -39,6 +43,7 @@ dependencies {
     provided group: 'org.eclipse.jetty.orbit', name: 'javax.servlet', version: '3.0.0.v201112011016'
 }
 
+// remove provided scope from war
 war {
     classpath -= configurations.provided
 }
@@ -55,4 +60,16 @@ task jettyRun(type: JavaExec) {
     classpath configurations.container
 }
 
+// include war file
+applicationDistribution.from(war) {
+    into("webapp")
+}
+
+// remove all jars added by default by application plugin
+distZip {
+    excludes = ["*.jar"]    
+}
+
 jettyRun.dependsOn war
+
+
