@@ -51,3 +51,4 @@ task jettyRun(type: JavaExec) {
     classpath configurations.container
 }
 
+jettyRun.dependsOn war
