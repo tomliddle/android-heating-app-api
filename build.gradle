@@ -76,7 +76,11 @@ task prepareContainer(type: Copy) {
 }
 
 startScripts {
-    classpath = configurations.container    
+    classpath = configurations.container
+
+    doLast {
+        unixScript.text = unixScript.text.replace("$mainClassName", "$mainClassName webapp/$war.archiveName")  
+    }
 }
 
 distZip {
