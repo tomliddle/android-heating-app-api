@@ -65,11 +65,24 @@ applicationDistribution.from(war) {
     into("webapp")
 }
 
-// remove all jars added by default by application plugin
-distZip {
-    excludes = ["*.jar"]    
+applicationDistribution.from('build/container') {
+    into("lib")
 }
 
+// prepare container 
+task prepareContainer(type: Copy) {
+    from configurations.container
+    into 'build/container'    
+}
+
+distZip {
+    // remove all jars added by default by application plugin
+    def toExclude = [jar.archiveName]
+    configurations.runtime.each { dependency ->
+        toExclude.add(dependency.getName())
+    }
+    excludes = toExclude
+}
+
+distZip.dependsOn prepareContainer
 jettyRun.dependsOn war
-
-
