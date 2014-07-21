@@ -75,6 +75,10 @@ task prepareContainer(type: Copy) {
     into 'build/container'    
 }
 
+startScripts {
+    classpath = configurations.container    
+}
+
 distZip {
     // remove all jars added by default by application plugin
     def toExclude = [jar.archiveName]
