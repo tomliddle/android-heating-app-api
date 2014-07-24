@@ -83,6 +83,14 @@ startScripts {
     }
 }
 
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+        scopes.PROVIDED.plus += [ configurations.provided ]
+    }
+}
+
 distZip {
     // remove all jars added by default by application plugin
     def toExclude = [jar.archiveName]
