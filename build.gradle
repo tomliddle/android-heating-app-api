@@ -2,9 +2,10 @@ apply plugin: 'scala'
 apply plugin: 'idea'
 apply plugin: 'war'
 apply plugin: 'application'
+apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
 
 // jetty runner class
-mainClassName = 'org.eclipse.jetty.runner.Runner'
+//mainClassName = 'org.eclipse.jetty.runner.Runner'
 
 configurations {
     provided // provided scope
@@ -23,42 +24,54 @@ sourceSets {
     }
 }
 
-repositories
-{
+repositories {
     mavenCentral()
 }
 
 dependencies {
     // scala! 
-    compile group: 'org.scala-lang', name: 'scala-library', version: '2.10'
+	compile group: 'org.scala-lang', name: 'scala-library', version: '2.10'
 
-    // scalatra deps
+	compile 'org.eclipse.jetty:jetty-server:9.3.0.M1'
+	compile 'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
+	compile 'org.eclipse.jetty:jetty-webapp:9.3.0.M1'
+
+	//compile 'org.akhikhl.gretty:gretty-commons:0.0.25'
+
+
+
+	// scalatra deps
     compile group: 'org.scalatra', name: 'scalatra_2.10', version: '2.3.0'
     compile group: 'org.scalatra', name: 'scalatra-scalate_2.10', version: '2.3.0'
 
-    // container used to run from gradle
-    container group: 'org.eclipse.jetty', name: 'jetty-runner', version: '9.2.1.v20140609'
+	compile group: 'com.pi4j', name: 'pi4j-core', version: '0.0.5'
+
+
+	//compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.7'
+
+
+	// container used to run from gradle
+   // container group: 'org.eclipse.jetty', name: 'jetty-runner', version: '9.3.0.M1'
 
     // servlet api
     provided group: 'org.eclipse.jetty.orbit', name: 'javax.servlet', version: '3.0.0.v201112011016'
 }
 
 // remove provided scope from war
-war {
+/*war {
     classpath -= configurations.provided
-}
+}*/
 
 // manually specify gradle version for gradlew
 task wrapper(type: Wrapper) {
     distributionUrl = "http://services.gradle.org/distributions/gradle-2.0-bin.zip" 
 }
 
-// runs jetty 
-task jettyRun(type: JavaExec) {
-    main = "org.eclipse.jetty.runner.Runner"
-    args = [war.archivePath]
-    classpath configurations.container
+gretty {
+	contextPath = "/"
 }
+/*
+
 
 // include war file
 applicationDistribution.from(war) {
@@ -82,6 +95,7 @@ startScripts {
         unixScript.text = unixScript.text.replace("$mainClassName", "$mainClassName webapp/$war.archiveName")  
     }
 }
+*/
 
 idea {
     module {
@@ -91,6 +105,7 @@ idea {
     }
 }
 
+/*
 distZip {
     // remove all jars added by default by application plugin
     def toExclude = [jar.archiveName]
@@ -101,4 +116,5 @@ distZip {
 }
 
 distZip.dependsOn prepareContainer
-jettyRun.dependsOn war
+
+*/
