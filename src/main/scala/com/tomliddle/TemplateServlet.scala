@@ -1,21 +1,23 @@
+package com.tomliddle
+
 import org.scalatra._
-import scalate.ScalateSupport
+
 import scala.sys.process._
 
 class MyServlet extends ScalatraServlet {
 
-    get("/temperature") {
+    get("/temp") {
 		"pcsensor -c".!!
     }
-	get("/on") {
+	get("/heating_on") {
 		I2CController.heatingOn
 		"heating on"
 	}
-	get("/off") {
+	get("/heating_off") {
 		I2CController.heatingOn
 		"heating off"
 	}
-	get("/thermostat") {
+	get("/heating_thermostat") {
 		I2CController.heatingThermostat
 		"heating thermostat"
 	}
