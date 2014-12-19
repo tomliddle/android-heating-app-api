@@ -1,6 +1,4 @@
-package com.tomliddle
-
-import com.pi4j.io.i2c.{I2CBus, I2CDevice, I2CFactory}
+package com.tomliddle;
 
 /**
  * Created by tom on 18/12/14.
