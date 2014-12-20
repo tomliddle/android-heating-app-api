@@ -1,0 +1,64 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="HomeAutomation:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/HomeAutomation_jar</output-path>
+    <root id="archive" name="HomeAutomation.jar">
+      <element id="module-output" name="HomeAutomation" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.scala-lang/scala-reflect/2.10.4/dad1949e8bddc4f97a77025e67d6f0bb2a5071be/scala-reflect-2.10.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-http/9.3.0.M1/8d1c4345e49ec0bac47ed361997b15deca2917a5/jetty-http-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.scalatra/scalatra_2.10/2.3.0/993a5797f3cb4da1e1162f874f343f2600cff263/scalatra_2.10-2.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/config-1.2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/log4j-1.2.17.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/joda-time-2.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/rl_2.10-0.4.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/mime-util-2.1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/slf4j-api-1.7.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/joda-convert-1.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jetty-io-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jetty-xml-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jetty-http-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jetty-util-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/scalatra_2.10-2.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/slf4j-log4j12-1.7.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jcl-over-slf4j-1.6.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/scala-library-2.10.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/scala-reflect-2.10.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/akka-actor_2.10-2.3.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jetty-server-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jetty-webapp-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/scala-compiler-2.10.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jetty-servlet-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javax.servlet-api-3.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jetty-security-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/juniversalchardet-1.0.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/scalate-core_2.10-1.7.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/scalate-util_2.10-1.7.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/grizzled-slf4j_2.10-1.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/scalatra-common_2.10-2.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/scalatra-scalate_2.10-2.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.1.0/3cd63d075497751784b2fa84be59432f4905bf7c/javax.servlet-api-3.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-util/9.3.0.M1/ef6171e9f865a29cf91c81a5cb5186855882d77c/jetty-util-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.scala-lang/scala-library/2.10.4/9aae4cb1802537d604e03688cab744ff47b31a7d/scala-library-2.10.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.joda/joda-convert/1.6/bdb5cdf9d85c2aae59a0d914845f3304d346a886/joda-convert-1.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.juniversalchardet/juniversalchardet/1.0.3/cd49678784c46aa8789c060538e0154013bb421b/juniversalchardet-1.0.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/joda-time/joda-time/2.3/56498efd17752898cfcc3868c1b6211a07b12b8f/joda-time-2.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.7/2b8019b6249bb05d81d3a3094e468753e2b21311/slf4j-api-1.7.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.clapper/grizzled-slf4j_2.10/1.0.2/a996fb026bba0b470d29b251c9f6d482d6d8ecec/grizzled-slf4j_2.10-1.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-servlet/9.3.0.M1/8e5a3093acc9ec307712cbb05dc71ef00886f728/jetty-servlet-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.scalatra/scalatra-common_2.10/2.3.0/2b28ccdcbf0e16cf890e329543b033648c55c9a9/scalatra-common_2.10-2.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-webapp/9.3.0.M1/4d99f1c16ad4c3a8ef3971be099e4103b090e005/jetty-webapp-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-security/9.3.0.M1/f377681c5c4347547e59b13b8231cf381147559d/jetty-security-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.scala-lang/scala-compiler/2.10.4/9e65406822299d082caae78699bb4b64011340ef/scala-compiler-2.10.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.scalatra.rl/rl_2.10/0.4.10/1668d6302ae2dde424ded5ad9a56027c2d1e7b69/rl_2.10-0.4.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-server/9.3.0.M1/824c17ac5d84c7dc8440c8f5ff0a006aa8bea0ed/jetty-server-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-xml/9.3.0.M1/6ed233d8ca8cfacf69fe4d7f0b0495f49b533653/jetty-xml-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.scalatra.scalate/scalate-util_2.10/1.7.0/dc95954142a8916aa20c0fe2436f330a0053fc35/scalate-util_2.10-1.7.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-core/0.0.5/614a071e0ec9e3fc9a5a69938745cc4c8f776222/pi4j-core-0.0.5.jar" path-in-jar="/" />
+      <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-native/0.0.5/64a011abd3c97bf045fd281eeedd54a185ac34ef/pi4j-native-0.0.5-hard-float.so" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/eu.medsea.mimeutil/mime-util/2.1.3/c9cfae15c74f62491d4f28def0dff1dabe52a47/mime-util-2.1.3.jar" path-in-jar="/" />
+      <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.pi4j/pi4j-native/0.0.5/6bfbe82876a676c01ff1edb8772ef8ec3d870d04/pi4j-native-0.0.5-soft-float.so" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.scalatra/scalatra-scalate_2.10/2.3.0/86623d970c18b0f1b26278a7aa5abf86b07bb302/scalatra-scalate_2.10-2.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-io/9.3.0.M1/8acc75a2c62f4d925d072a2f6a830ae22932fa7b/jetty-io-9.3.0.M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.scalatra.scalate/scalate-core_2.10/1.7.0/2dc5d759d7a9aa88c2b182071e39a7bd290d2e63/scalate-core_2.10-1.7.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
