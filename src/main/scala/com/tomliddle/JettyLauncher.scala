@@ -16,6 +16,8 @@ def main(args: Array[String]) {
 	val context = new WebAppContext()
 	context setContextPath "/"
 	context.setResourceBase("src/main/webapp")
+	context.setDescriptor("src/main/webapp/WEB-INF/web.xml")
+
 	context.addEventListener(new ScalatraListener)
 	context.addServlet(classOf[DefaultServlet], "/")
 

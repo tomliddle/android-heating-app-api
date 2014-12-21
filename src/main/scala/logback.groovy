@@ -21,9 +21,9 @@ appender("FILE", RollingFileAppender) {
 
 appenders = ["FILE"]
 
-root(INFO, appenders)
+root(DEBUG, appenders)
 logger("org", WARN)
-logger("com", WARN)
+logger("com", DEBUG)
 logger("akka", WARN)
 
 

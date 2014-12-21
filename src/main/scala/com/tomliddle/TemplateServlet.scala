@@ -10,15 +10,16 @@ import scala.concurrent.{Future, ExecutionContext}
 import scala.concurrent.duration._
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
+import org.scalatra.scalate.ScalateSupport
 
 
-class MyServlet extends ScalatraServlet with FutureSupport {
+class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport {
 
-	//implicit val timeout = Timeout(5, TimeUnit.SECONDS)
+	implicit val timeout = Timeout(5, TimeUnit.SECONDS)
 	protected implicit def executor: ExecutionContext = system.dispatcher
 
 	import _root_.akka.pattern.ask
-	implicit val timeout = Timeout(5, TimeUnit.SECONDS)
+
 	val logger = LoggerFactory.getLogger(getClass)
 	val system = ActorSystem("actor_system")
 	val myActor = system.actorOf(Props[Worker])
@@ -49,25 +50,13 @@ class MyServlet extends ScalatraServlet with FutureSupport {
 		myActor ? GetStatus
 	}
 	get("/heating") {
-		val heatingStatusAllFut = (myActor ? GetStatus).mapTo[HeatingStatusAll]
-
-		heatingStatusAllFut.map {
-			statusAll =>
-
-			<html>
-				<head></head>
-				<body>
-					<h1>Heating system</h1>
-					<p>Current temp: {statusAll.currentTemp}</p>
-					<p>Status: {statusAll.status}</p>
-					<p>Target temp: {statusAll.targetTemp}</p>
-					<p><a href="/heating/set/19">Set to 19</a></p>
-					<p><a href="/heating/on">Turn on</a></p>
-					<p><a href="/heating/off">Turn off</a></p>
-					<p><a href="/heating/thermostat">Set to thermostat</a></p>
-				</body>
-			</html>
-
+		contentType="text/html"
+		implicit val timeoutT = Timeout(5, TimeUnit.SECONDS)
+		new AsyncResult {
+			val is = ((myActor ? GetStatus).mapTo[HeatingStatusAll]).map {
+				statusAll =>
+					mustache("/heating", "status" -> statusAll.status, "targetTemp" -> statusAll.targetTemp, "currentTemp" -> statusAll.currentTemp)
+			}
 		}
 
 	}
