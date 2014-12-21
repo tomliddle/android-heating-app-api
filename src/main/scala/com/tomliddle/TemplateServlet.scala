@@ -60,8 +60,7 @@ class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport {
 		new AsyncResult {
 			val is = ((myActor ? GetStatus).mapTo[HeatingStatusAll]).map {
 				statusAll =>
-					//mustache("/heating", "status" -> statusAll.status, "targetTemp" -> statusAll.targetTemp, "currentTemp" -> statusAll.currentTemp)
-					""
+					mustache("/heating", "status" -> statusAll.status, "targetTemp" -> statusAll.targetTemp, "currentTemp" -> statusAll.currentTemp)
 			}
 		}
 
