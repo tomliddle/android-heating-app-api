@@ -6,7 +6,7 @@ import akka.util.Timeout
 import org.scalatra._
 import scala.sys.process._
 import _root_.akka.pattern.ask
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{Future, ExecutionContext}
 import scala.concurrent.duration._
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
@@ -46,7 +46,30 @@ class MyServlet extends ScalatraServlet with FutureSupport {
 		}
 	}
 	get("/heating/status") {
-		(myActor ? GetStatus)
+		myActor ? GetStatus
+	}
+	get("/heating") {
+		val heatingStatusAllFut = (myActor ? GetStatus).mapTo[HeatingStatusAll]
+
+		heatingStatusAllFut.map {
+			statusAll =>
+
+			<html>
+				<head></head>
+				<body>
+					<h1>Heating system</h1>
+					<p>Current temp: {statusAll.currentTemp}</p>
+					<p>Status: {statusAll.status}</p>
+					<p>Target temp: {statusAll.targetTemp}</p>
+					<p><a href="/heating/set/19">Set to 19</a></p>
+					<p><a href="/heating/on">Turn on</a></p>
+					<p><a href="/heating/off">Turn off</a></p>
+					<p><a href="/heating/thermostat">Set to thermostat</a></p>
+				</body>
+			</html>
+
+		}
+
 	}
 }
 

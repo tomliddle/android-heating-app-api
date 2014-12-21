@@ -9,7 +9,8 @@ import scala.concurrent.ExecutionContext
 case class Work(status: HeatingStatus)
 case object GetStatus
 case object GetTemp
-case class HeatingStatus(status: Status, temp: Option[Float])
+case class HeatingStatus(status: Status, targetTemp: Option[Float])
+case class HeatingStatusAll(status: Status, targetTemp: Option[Float], currentTemp: Option[Float])
 case class CheckAndSetTemp(temp: Float)
 
 object Status extends Enumeration {
@@ -42,8 +43,8 @@ class Worker extends Actor with ActorLogging {
 				case Status.THERMOSTAT =>
 					sender() ! callCommand("heating_thermostat")
 				case Status.SET_TO =>
-					cancellable = Some(context.system.scheduler.schedule(10 seconds, 5 minutes, self, CheckAndSetTemp(status.temp.get)))
-					sender() ! s"setting thermostat to ${status.temp.get}"
+					cancellable = Some(context.system.scheduler.schedule(10 seconds, 5 minutes, self, CheckAndSetTemp(status.targetTemp.get)))
+					sender() ! s"setting thermostat to ${status.targetTemp.get}"
 			}
 		}
 
@@ -58,7 +59,7 @@ class Worker extends Actor with ActorLogging {
 			}
 
 		case GetStatus =>
-			sender() ! s"${status.status} ${status.temp.getOrElse(-1)} \n ${temp.getOrElse(-1)}"
+			sender() ! HeatingStatusAll(status.status, status.targetTemp, temp)
 
 		// Only called to read the current temp and set variable
 		case GetTemp =>
