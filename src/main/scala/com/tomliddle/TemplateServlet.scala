@@ -28,12 +28,15 @@ class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport {
 	get("/heating/on") {
 		// Should have async result here really
 		myActor ? HeatingStatus(Status.ON, None)
+		redirect("/heating")
 	}
 	get("/heating/off") {
 		(myActor ? HeatingStatus(Status.OFF, None))
+		redirect("/heating")
 	}
 	get("/heating/thermostat") {
 		(myActor ? HeatingStatus(Status.THERMOSTAT, None))
+		redirect("/heating")
 	}
 	get("/heating/set/:temp") {
 		try {
@@ -45,17 +48,20 @@ class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport {
 				e.getMessage
 			}
 		}
+		redirect("/heating")
 	}
-	get("/heating/status") {
+	/*get("/heating/status") {
 		myActor ? GetStatus
-	}
+		redirect("/heating")
+	}*/
 	get("/heating") {
 		contentType="text/html"
 		implicit val timeoutT = Timeout(5, TimeUnit.SECONDS)
 		new AsyncResult {
 			val is = ((myActor ? GetStatus).mapTo[HeatingStatusAll]).map {
 				statusAll =>
-					mustache("/heating", "status" -> statusAll.status, "targetTemp" -> statusAll.targetTemp, "currentTemp" -> statusAll.currentTemp)
+					//mustache("/heating", "status" -> statusAll.status, "targetTemp" -> statusAll.targetTemp, "currentTemp" -> statusAll.currentTemp)
+					""
 			}
 		}
 

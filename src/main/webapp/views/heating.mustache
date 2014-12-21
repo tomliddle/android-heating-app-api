@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Heating system</title>
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/starter-template.css" rel="stylesheet">
+
+	<script src="../js/jquery-2.1.3.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+
+	<script>
+			$(document).ready(function() {
+    			$("#targetTempButton").click(function(evt) {
+    				evt.preventDefault();
+    				var temp = $("#targetTemp").val();
+    				if ($.isNumeric(temp)) {
+    					window.location = "/heating/set/" + temp;
+    				}
+    			});
+			});
+		</script>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Heating controls</a>
+		</div>
+		<div id="navbar" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#">Home</a></li>
+				<li><a href="#about">About</a></li>
+				<li><a href="#contact">Contact</a></li>
+			</ul>
+		</div><!--/.nav-collapse -->
+	</div>
+</nav>
+
+<div class="container">
+	<div class="starter-template">
+		<h1>Heating system</h1>
+		<p>Current temp: {{currentTemp}}</p>
+		<p>Status: {{status}}</p>
+		<p>Target temp: {{targetTemp}}</p>
+
+		<p>
+		<form role="form" class="form-inline">
+			<div class="form-group">
+				<div class="input-group">
+					<input type="text" style="width: 50px" class="form-control" id="targetTemp" value="19" placeholder="19">
+					<a class="btn btn-primary" id="targetTempButton" href="#">Set temp...</a>
+				</div>
+			</div>
+		</form>
+		</p>
+		<p><a class="btn btn-primary" href="/heating/on">Turn on</a></p>
+		<p><a class="btn btn-primary" href="/heating/off">Turn off</a></p>
+		<p><a class="btn btn-primary" href="/heating/thermostat">Set to thermostat</a></p>
+	</div>
+</div>
+
+
+</body>
+</html>
