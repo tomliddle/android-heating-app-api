@@ -1,6 +1,7 @@
 package com.tomliddle
 
-import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.server.{Handler, Server}
+import org.eclipse.jetty.server.handler.{DefaultHandler, HandlerList, ResourceHandler}
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.webapp.WebAppContext
 import org.scalatra.servlet.ScalatraListener
@@ -15,6 +16,8 @@ def main(args: Array[String]) {
 	val server = new Server(port)
 	val context = new WebAppContext()
 	context setContextPath "/"
+
+	//val webDir = JettyLauncher.getClass.getClassLoader.getResource(".").getPath
 	context.setResourceBase("src/main/webapp")
 	context.setDescriptor("src/main/webapp/WEB-INF/web.xml")
 

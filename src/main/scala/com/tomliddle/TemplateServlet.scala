@@ -65,5 +65,11 @@ class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport {
 		}
 
 	}
+
+	notFound {
+		contentType = "text/html"
+		val s = servletContext.getContextPath
+		serveStaticResource() getOrElse resourceNotFound()
+	}
 }
 

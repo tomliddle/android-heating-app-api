@@ -27,6 +27,14 @@ configured in Scala code there.
 		<async-supported>true</async-supported>
 	</filter-mapping>
 
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>fonts/*</url-pattern>
+		<url-pattern>css/*</url-pattern>
+		<url-pattern>js/*</url-pattern>
+		<url-pattern>*</url-pattern>
+	</servlet-mapping>
+
 
 </web-app>
 

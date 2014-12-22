@@ -52,8 +52,8 @@ dependencies {
 
     runtime "org.codehaus.groovy:groovy:1.8.6"
 
-    compile 'org.eclipse.jetty:jetty-server:9.3.0.M1'
-	compile 'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
+    //compile 'org.eclipse.jetty:jetty-server:9.3.0.M1'
+	//compile 'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
 	compile 'org.eclipse.jetty:jetty-webapp:9.3.0.M1'
 
 	// scalatra deps
@@ -72,6 +72,8 @@ task wrapper(type: Wrapper) {
     distributionUrl = "http://services.gradle.org/distributions/gradle-2.0-bin.zip" 
 }
 
+
+
 task copyToLib(type: Copy) {
 	into "$buildDir/libs"
 	from {
@@ -83,8 +85,10 @@ task copyToLib(type: Copy) {
 }
 
 task localDevelopment(type: Copy) {
-    into "lib"
-    from configurations.runtime
+    from configurations.runtime {
+        into "lib"
+    }
+    //from resources.srcDir 'src/main/webapp'
 }
 
 task dist(type: Jar) {

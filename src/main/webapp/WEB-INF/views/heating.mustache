@@ -5,11 +5,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Heating system</title>
-	<link href="../css/bootstrap.min.css" rel="stylesheet">
-	<link href="../css/starter-template.css" rel="stylesheet">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/starter-template.css" rel="stylesheet">
 
-	<script src="../js/jquery-2.1.3.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
+	<script src="js/jquery-2.1.3.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 
 	<script>
 			$(document).ready(function() {
@@ -55,16 +55,14 @@
 		<p>
 		<form role="form" class="form-inline">
 			<div class="form-group">
-				<div class="input-group">
-					<input type="text" style="width: 50px" class="form-control" id="targetTemp" value="19" placeholder="19">
-					<a class="btn btn-primary" id="targetTempButton" href="#">Set temp...</a>
-				</div>
+				<input type="text"  class="form-control" id="targetTemp" value="19">
+				<a class="btn btn-primary btn-block" id="targetTempButton" href="#">Set temp...</a>
 			</div>
 		</form>
 		</p>
-		<p><a class="btn btn-primary" href="/heating/on">Turn on</a></p>
-		<p><a class="btn btn-primary" href="/heating/off">Turn off</a></p>
-		<p><a class="btn btn-primary" href="/heating/thermostat">Set to thermostat</a></p>
+		<p><a class="btn btn-primary btn-block" href="/heating/on">Turn on</a></p>
+		<p><a class="btn btn-primary btn-block" href="/heating/off">Turn off</a></p>
+		<p><a class="btn btn-primary btn-block" href="/heating/thermostat">Set to thermostat</a></p>
 	</div>
 </div>
 
