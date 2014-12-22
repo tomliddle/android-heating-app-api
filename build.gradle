@@ -47,13 +47,8 @@ dependencies {
 
 
     compile group: 'org.scala-lang', name: 'scala-library', version: '2.10'
-
     compile 'com.typesafe.akka:akka-actor_2.10:2.3.7'
-
     runtime "org.codehaus.groovy:groovy:1.8.6"
-
-    //compile 'org.eclipse.jetty:jetty-server:9.3.0.M1'
-	//compile 'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
 	compile 'org.eclipse.jetty:jetty-webapp:9.3.0.M1'
 
 	// scalatra deps
