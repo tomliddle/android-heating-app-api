@@ -26,7 +26,7 @@ sourceSets {
     main { 
         compileClasspath += configurations.provided 
         runtimeClasspath += configurations.provided
-		resources.srcDir 'src/main/webapp'
+		//resources.srcDir 'src/main/webapp'
     }
     test { 
         compileClasspath += configurations.provided 
@@ -68,6 +68,12 @@ task wrapper(type: Wrapper) {
 }
 
 
+task copyResourcesToLib(type: Copy) {
+    into "$buildDir/libs/src/main/webapp"
+    from {
+        'src/main/webapp'
+    }
+}
 
 task copyToLib(type: Copy) {
 	into "$buildDir/libs"
@@ -77,6 +83,7 @@ task copyToLib(type: Copy) {
 	from {
 		'bin'
 	}
+    dependsOn(copyResourcesToLib)
 }
 
 task localDevelopment(type: Copy) {
