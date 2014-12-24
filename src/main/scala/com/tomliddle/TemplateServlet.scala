@@ -1,21 +1,19 @@
 package com.tomliddle
 
-import _root_.akka.dispatch._
-import _root_.akka.actor.{Props, Cancellable, ActorSystem}
-import akka.util.Timeout
-import org.json4s.{Formats, DefaultFormats}
-import org.scalatra._
-import org.scalatra.json.JacksonJsonSupport
-import scala.sys.process._
-import _root_.akka.pattern.ask
-import scala.concurrent.{Future, ExecutionContext}
-import scala.concurrent.duration._
-import org.slf4j.LoggerFactory
+import java.io.File
 import java.util.concurrent.TimeUnit
-import org.scalatra.scalate.ScalateSupport
+import _root_.akka.actor.{ActorSystem, Props}
+import akka.util.Timeout
+import org.scalatra._
+import org.slf4j.LoggerFactory
+import org.json4s._
+import org.json4s.JsonDSL._
+import org.json4s.jackson.JsonMethods._
+
+import scala.concurrent.ExecutionContext
 
 
-class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport with JacksonJsonSupport {
+class MyServlet extends ScalatraServlet with FutureSupport {
 
 	protected implicit val timeout = Timeout(5, TimeUnit.SECONDS)
 	protected implicit val jsonFormats: Formats = DefaultFormats
@@ -53,19 +51,19 @@ class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport w
 		redirect("/heating/status")
 	}
 	get("/heating/status") {
-		contentType = formats("json")
+		contentType = "application/json"
 		implicit val timeoutT = Timeout(5, TimeUnit.SECONDS)
 		new AsyncResult {
 			val is = (myActor ? GetStatus).mapTo[HeatingStatusAll].map {
 				statusAll =>
-					Map("status" -> statusAll.status.toString, "currentTemp" -> statusAll.currentTemp, "targetTemp" -> statusAll.targetTemp)
+					compact(render(JObject("status" -> statusAll.status.toString,"currentTemp" -> statusAll.currentTemp,"targetTemp" -> statusAll.targetTemp)))
 			}
 		}
 	}
 
 	get("/heating") {
 		contentType="text/html"
-		ssp("/heating")
+		new File("src/main/webapp/heating.html")
 	}
 }
 

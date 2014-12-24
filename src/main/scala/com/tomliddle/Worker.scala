@@ -1,10 +1,11 @@
 package com.tomliddle
 
-import akka.actor.{Cancellable, ActorLogging, Actor}
-import scala.sys.process._
+import akka.actor.{Actor, ActorLogging, Cancellable}
 import com.tomliddle.Status.Status
-import scala.concurrent.duration._
+
 import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
+import scala.sys.process._
 
 case class Work(status: HeatingStatus)
 case object GetStatus
