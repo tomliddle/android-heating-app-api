@@ -6,17 +6,26 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Heating system</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/starter-template.css" rel="stylesheet">
+	<style>
+		body {
+			padding-top: 50px;
+		}
+		.starter-template {
+			padding: 40px 15px;
+			text-align: center;
+		}
+	</style>
 
 	<script src="js/jquery-2.1.3.min.js"></script>
 	<script src="js/mustache.min.js"></script>
+
 
 	<script>
 			$(document).ready(function() {
 				var renderData = function(data) {
 					var $template = $('#template').html();
 					Mustache.parse($template);
-					var rendered = Mustache.render(template, data);
+					var rendered = Mustache.render($template, data);
 					$('#target').html(rendered);
 				};
 
@@ -24,19 +33,20 @@
     				evt.preventDefault();
     				var temp = $("#targetTemp").val();
     				if ($.isNumeric(temp)) {
-						$.get(this.target + temp, function( data ) {
+						$.get(this.href + temp, function(data) {
 							renderData(data);
 						});
     				}
     			});
 
 				$(".renderHandler").click(function(evt) {
-					$.get(this.target + temp, function( data ) {
+					evt.preventDefault();
+					$.get(this.href, function(data) {
 						renderData(data);
 					});
 				});
 
-				$.get("/heating/status", function( data ) {
+				$.get("/heating/status", function(data) {
 					renderData(data);
 				});
 			});
@@ -67,7 +77,7 @@
 <div class="container">
 	<div class="starter-template">
 		<h1>Heating system</h1>
-		<div id="target"></div>
+		<div id="target">Loading...</div>
 
 		<script id="template" type="x-tmpl-mustache">
 			<p>Current temp: {{currentTemp}}</p>
@@ -79,7 +89,7 @@
 		<div class="row">
 			<div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 ">
 				<div class="form-group"><input type="text"  class="form-control" id="targetTemp" value="19"></div>
-				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/set/" id="targetTempButton" href="#">Set temp...</a></div>
+				<div class="form-group"><a class="btn btn-primary btn-block" href="/heating/set/" id="targetTempButton" href="#">Set temp...</a></div>
 				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/on">Turn on</a></div>
 				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/off">Turn off</a></div>
 				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/thermostat">Set to thermostat</a></div>

@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 import org.scalatra.scalate.ScalateSupport
 
 
-class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport with GZipSupport with JacksonJsonSupport {
+class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport with JacksonJsonSupport {
 
 	protected implicit val timeout = Timeout(5, TimeUnit.SECONDS)
 	protected implicit val jsonFormats: Formats = DefaultFormats
@@ -52,33 +52,20 @@ class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport w
 		}
 		redirect("/heating/status")
 	}
-	get("/") {
-		redirect("/heating")
-	}
-
 	get("/heating/status") {
 		contentType = formats("json")
 		implicit val timeoutT = Timeout(5, TimeUnit.SECONDS)
 		new AsyncResult {
-			val is = ((myActor ? GetStatus).mapTo[HeatingStatusAll])
+			val is = (myActor ? GetStatus).mapTo[HeatingStatusAll].map {
+				statusAll =>
+					Map("status" -> statusAll.status.toString, "currentTemp" -> statusAll.currentTemp, "targetTemp" -> statusAll.targetTemp)
+			}
 		}
 	}
 
 	get("/heating") {
 		contentType="text/html"
-		implicit val timeoutT = Timeout(5, TimeUnit.SECONDS)
-		new AsyncResult {
-			val is = ((myActor ? GetStatus).mapTo[HeatingStatusAll]).map {
-				statusAll =>
-					mustache("/heating", "status" -> statusAll.status, "targetTemp" -> statusAll.targetTemp, "currentTemp" -> statusAll.currentTemp)
-			}
-		}
-	}
-
-	notFound {
-		contentType = "text/html"
-		val s = servletContext.getContextPath
-		serveStaticResource() getOrElse resourceNotFound()
+		ssp("/heating")
 	}
 }
 
