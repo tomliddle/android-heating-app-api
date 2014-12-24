@@ -3,7 +3,9 @@ package com.tomliddle
 import _root_.akka.dispatch._
 import _root_.akka.actor.{Props, Cancellable, ActorSystem}
 import akka.util.Timeout
+import org.json4s.{Formats, DefaultFormats}
 import org.scalatra._
+import org.scalatra.json.JacksonJsonSupport
 import scala.sys.process._
 import _root_.akka.pattern.ask
 import scala.concurrent.{Future, ExecutionContext}
@@ -13,30 +15,31 @@ import java.util.concurrent.TimeUnit
 import org.scalatra.scalate.ScalateSupport
 
 
-class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport {
+class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport with GZipSupport with JacksonJsonSupport {
 
-	implicit val timeout = Timeout(5, TimeUnit.SECONDS)
+	protected implicit val timeout = Timeout(5, TimeUnit.SECONDS)
+	protected implicit val jsonFormats: Formats = DefaultFormats
 	protected implicit def executor: ExecutionContext = system.dispatcher
 
 	import _root_.akka.pattern.ask
 
-	val logger = LoggerFactory.getLogger(getClass)
-	val system = ActorSystem("actor_system")
-	val myActor = system.actorOf(Props[Worker])
+	private val logger = LoggerFactory.getLogger(getClass)
+	private val system = ActorSystem("actor_system")
+	private val myActor = system.actorOf(Props[Worker])
 
 
 	get("/heating/on") {
 		// Should have async result here really
 		myActor ? HeatingStatus(Status.ON, None)
-		redirect("/heating")
+		redirect("/heating/status")
 	}
 	get("/heating/off") {
 		(myActor ? HeatingStatus(Status.OFF, None))
-		redirect("/heating")
+		redirect("/heating/status")
 	}
 	get("/heating/thermostat") {
 		(myActor ? HeatingStatus(Status.THERMOSTAT, None))
-		redirect("/heating")
+		redirect("/heating/status")
 	}
 	get("/heating/set/:temp") {
 		try {
@@ -45,15 +48,22 @@ class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport {
 		} catch {
 			case e: NumberFormatException => {
 				logger.error("Number format exception", e)
-				e.getMessage
 			}
 		}
+		redirect("/heating/status")
+	}
+	get("/") {
 		redirect("/heating")
 	}
-	/*get("/heating/status") {
-		myActor ? GetStatus
-		redirect("/heating")
-	}*/
+
+	get("/heating/status") {
+		contentType = formats("json")
+		implicit val timeoutT = Timeout(5, TimeUnit.SECONDS)
+		new AsyncResult {
+			val is = ((myActor ? GetStatus).mapTo[HeatingStatusAll])
+		}
+	}
+
 	get("/heating") {
 		contentType="text/html"
 		implicit val timeoutT = Timeout(5, TimeUnit.SECONDS)
@@ -63,7 +73,6 @@ class MyServlet extends ScalatraServlet with FutureSupport with ScalateSupport {
 					mustache("/heating", "status" -> statusAll.status, "targetTemp" -> statusAll.targetTemp, "currentTemp" -> statusAll.currentTemp)
 			}
 		}
-
 	}
 
 	notFound {

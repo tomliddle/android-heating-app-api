@@ -7,6 +7,8 @@ apply plugin: 'application'
 // jetty runner class
 mainClassName = 'com.tomliddle.JettyLauncher'
 
+
+
 version = '1.0'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -45,7 +47,6 @@ dependencies {
     // Bridge commons logging over slf4j - note exclusion within the configurations
     compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.6.6'
 
-
     compile group: 'org.scala-lang', name: 'scala-library', version: '2.10'
     compile 'com.typesafe.akka:akka-actor_2.10:2.3.7'
     runtime "org.codehaus.groovy:groovy:1.8.6"
@@ -54,12 +55,8 @@ dependencies {
 	// scalatra deps
     compile group: 'org.scalatra', name: 'scalatra_2.10', version: '2.3.0'
     compile group: 'org.scalatra', name: 'scalatra-scalate_2.10', version: '2.3.0'
-
-	//compile group: 'com.pi4j', name: 'pi4j-core', version: '0.0.5'
-
-
-    // servlet api
-    //provided group: 'org.eclipse.jetty.orbit', name: 'javax.servlet', version: '3.0.0.v201112011016'
+	compile 'org.scalatra:scalatra-json_2.10:2.4.0.M2'
+	compile 'org.json4s:json4s-jackson_2.10:3.2.11'
 }
 
 // manually specify gradle version for gradlew
@@ -125,6 +122,5 @@ idea {
         scopes.PROVIDED.plus += [ configurations.provided ]
     }
 }
-
 
 //java -cp HomeAutomationRest-1.0-fatJar.jar:* com.tomliddle.JettyLauncher

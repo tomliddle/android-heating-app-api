@@ -9,17 +9,36 @@
 	<link href="css/starter-template.css" rel="stylesheet">
 
 	<script src="js/jquery-2.1.3.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
+	<script src="js/mustache.min.js"></script>
 
 	<script>
 			$(document).ready(function() {
+				var renderData = function(data) {
+					var $template = $('#template').html();
+					Mustache.parse($template);
+					var rendered = Mustache.render(template, data);
+					$('#target').html(rendered);
+				};
+
     			$("#targetTempButton").click(function(evt) {
     				evt.preventDefault();
     				var temp = $("#targetTemp").val();
     				if ($.isNumeric(temp)) {
-    					window.location = "/heating/set/" + temp;
+						$.get(this.target + temp, function( data ) {
+							renderData(data);
+						});
     				}
     			});
+
+				$(".renderHandler").click(function(evt) {
+					$.get(this.target + temp, function( data ) {
+						renderData(data);
+					});
+				});
+
+				$.get("/heating/status", function( data ) {
+					renderData(data);
+				});
 			});
 		</script>
 </head>
@@ -48,21 +67,25 @@
 <div class="container">
 	<div class="starter-template">
 		<h1>Heating system</h1>
-		<p>Current temp: {{currentTemp}}</p>
-		<p>Status: {{status}}</p>
-		<p>Target temp: {{targetTemp}}</p>
+		<div id="target"></div>
+
+		<script id="template" type="x-tmpl-mustache">
+			<p>Current temp: {{currentTemp}}</p>
+			<p>Status: {{status}}</p>
+			<p>Target temp: {{targetTemp}}</p>
+		</script>
 
 		<p>
-		<form role="form" class="form-inline">
-			<div class="form-group">
-				<input type="text"  class="form-control" id="targetTemp" value="19">
-				<a class="btn btn-primary btn-block" id="targetTempButton" href="#">Set temp...</a>
+		<div class="row">
+			<div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 ">
+				<div class="form-group"><input type="text"  class="form-control" id="targetTemp" value="19"></div>
+				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/set/" id="targetTempButton" href="#">Set temp...</a></div>
+				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/on">Turn on</a></div>
+				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/off">Turn off</a></div>
+				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/thermostat">Set to thermostat</a></div>
 			</div>
-		</form>
-		</p>
-		<p><a class="btn btn-primary btn-block" href="/heating/on">Turn on</a></p>
-		<p><a class="btn btn-primary btn-block" href="/heating/off">Turn off</a></p>
-		<p><a class="btn btn-primary btn-block" href="/heating/thermostat">Set to thermostat</a></p>
+		</div>
+
 	</div>
 </div>
 

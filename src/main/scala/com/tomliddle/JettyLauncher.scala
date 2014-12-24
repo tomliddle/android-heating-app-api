@@ -17,7 +17,6 @@ def main(args: Array[String]) {
 	val context = new WebAppContext()
 	context setContextPath "/"
 
-	//val webDir = JettyLauncher.getClass.getClassLoader.getResource(".").getPath
 	context.setResourceBase("src/main/webapp")
 	context.setDescriptor("src/main/webapp/WEB-INF/web.xml")
 
