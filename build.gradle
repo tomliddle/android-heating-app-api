@@ -53,8 +53,8 @@ dependencies {
 
 	// scalatra deps
     compile group: 'org.scalatra', name: 'scalatra_2.10', version: '2.3.0'
-    compile group: 'org.scalatra', name: 'scalatra-scalate_2.10', version: '2.3.0'
-	compile 'org.scalatra:scalatra-json_2.10:2.4.0.M2'
+    //compile group: 'org.scalatra', name: 'scalatra-scalate_2.10', version: '2.3.0'
+	//compile 'org.scalatra:scalatra-json_2.10:2.4.0.M2'
 	compile 'org.json4s:json4s-jackson_2.10:3.2.11'
 
 	runtime "org.codehaus.groovy:groovy:1.8.6"

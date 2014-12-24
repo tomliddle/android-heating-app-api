@@ -16,16 +16,5 @@ configured in Scala code there.
 		<async-supported>true</async-supported>
     </listener>
 
-	<filter>
-		<filter-name>TemplateEngineFilter</filter-name>
-		<filter-class>org.fusesource.scalate.servlet.TemplateEngineFilter</filter-class>
-		<async-supported>true</async-supported>
-	</filter>
-	<filter-mapping>
-		<filter-name>TemplateEngineFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-		<async-supported>true</async-supported>
-	</filter-mapping>
-
 </web-app>
 
