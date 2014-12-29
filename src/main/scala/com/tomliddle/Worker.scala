@@ -10,9 +10,9 @@ import scala.sys.process._
 case class Work(status: HeatingStatus)
 case object GetStatus
 case object GetTemp
-case class HeatingStatus(status: Status, targetTemp: Option[Float])
-case class HeatingStatusAll(status: Status, targetTemp: Option[Float], currentTemp: Option[Float])
-case class CheckAndSetTemp(temp: Float)
+case class HeatingStatus(status: Status, targetTemp: Option[BigDecimal])
+case class HeatingStatusAll(status: Status, targetTemp: Option[BigDecimal], currentTemp: Option[BigDecimal])
+case class CheckAndSetTemp(temp: BigDecimal)
 
 object Status extends Enumeration {
 	type Status = Value
@@ -24,7 +24,7 @@ class Worker extends Actor with ActorLogging {
 	implicit val ec = ExecutionContext.Implicits.global
 	var status: HeatingStatus = HeatingStatus(Status.UNKNOWN, None)
 	var cancellable: Option[Cancellable] = None
-	private var temp: Option[Float] = None
+	private var temp: Option[BigDecimal] = None
 
 	context.system.scheduler.schedule(1 second, 1 minute, self, GetTemp)
 
@@ -49,7 +49,7 @@ class Worker extends Actor with ActorLogging {
 			}
 		}
 
-		case CheckAndSetTemp(targetTemp: Float) =>
+		case CheckAndSetTemp(targetTemp: BigDecimal) =>
 			temp match {
 				case Some(currentTemp) =>
 					log.debug(s"Setting temp to $targetTemp")
@@ -67,7 +67,7 @@ class Worker extends Actor with ActorLogging {
 			val strTemp = s"/usr/local/bin/temp"!!
 
 			try {
-				this.temp = Some(strTemp.toFloat)
+				this.temp = Some(BigDecimal(strTemp.replace("\n", "")).setScale(2))
 			} catch {
 				case e: NumberFormatException => {
 					log.error("Number format exception", e)

@@ -81,11 +81,9 @@
 
 		<script id="template" type="x-tmpl-mustache">
 			<p>Current temp: {{currentTemp}}</p>
-			<p>Status: {{status}}</p>
-			<p>Target temp: {{targetTemp}}</p>
+			<p>Status: {{status}} {{targetTemp}}</p>
 		</script>
 
-		<p>
 		<div class="row">
 			<div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 ">
 				<div class="form-group"><input type="text"  class="form-control" id="targetTemp" value="19"></div>
@@ -93,6 +91,7 @@
 				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/on">Turn on</a></div>
 				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/off">Turn off</a></div>
 				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/thermostat">Set to thermostat</a></div>
+				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/status">Refresh</a></div>
 			</div>
 		</div>
 

@@ -41,7 +41,7 @@ class MyServlet extends ScalatraServlet with FutureSupport {
 	}
 	get("/heating/set/:temp") {
 		try {
-			val temp = params("temp").toFloat
+			val temp = BigDecimal(params("temp")).setScale(2)
 			(myActor ? HeatingStatus(Status.SET_TO, Some(temp)))
 		} catch {
 			case e: NumberFormatException => {
