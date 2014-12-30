@@ -22,6 +22,11 @@
 
 	<script>
 			$(document).ready(function() {
+				$.ajaxPrefilter( "json script", function( options ) {
+    				options.crossDomain = true;
+				});
+				$.support.cors = true;
+
 				var renderData = function(data) {
 					var $template = $('#template').html();
 					Mustache.parse($template);
