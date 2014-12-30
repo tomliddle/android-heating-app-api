@@ -31,19 +31,23 @@
 
     			$("#targetTempButton").click(function(evt) {
     				evt.preventDefault();
-    				var temp = $("#targetTemp").val();
-    				if ($.isNumeric(temp)) {
-						$.get(this.href + temp, function(data) {
-							renderData(data);
-						});
-    				}
+					if (confirm("Are you sure?")) {
+						var temp = $("#targetTemp").val();
+						if ($.isNumeric(temp)) {
+							$.get(this.href + temp, function (data) {
+								renderData(data);
+							});
+						}
+					}
     			});
 
 				$(".renderHandler").click(function(evt) {
 					evt.preventDefault();
-					$.get(this.href, function(data) {
-						renderData(data);
-					});
+					if (confirm("Are you sure?")) {
+						$.get(this.href, function (data) {
+							renderData(data);
+						});
+					}
 				});
 
 				$.get("/heating/status", function(data) {
