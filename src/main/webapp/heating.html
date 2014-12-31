@@ -85,12 +85,12 @@
 
 <div class="container">
 	<div class="starter-template">
-		<h1>Heating system</h1>
 		<div id="target">Loading...</div>
 
 		<script id="template" type="x-tmpl-mustache">
-			<p>Current temp: {{currentTemp}}</p>
-			<p>Status: {{status}} {{targetTemp}}</p>
+			<p>Current temp: {{#currentTemp}}{{currentTemp}}&#8451;{{/currentTemp}}</p>
+			<p>Status: {{status}} {{#targetTemp}}{{targetTemp}}&#8451;{{/targetTemp}}</p>
+			<p>Weather: {{#outsideTemp}}{{outsideTemp}}&#8451;{{/outsideTemp}} {{outlook}}</p>
 		</script>
 
 		<div class="row">

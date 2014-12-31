@@ -1,17 +1,22 @@
 package com.tomliddle
 
+import java.math.MathContext
+
 import akka.actor.{Actor, ActorLogging, Cancellable}
 import com.tomliddle.Status.Status
-
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
+import scala.math.BigDecimal.RoundingMode
 import scala.sys.process._
+import org.json4s._
+import org.json4s.jackson.JsonMethods._
 
 case class Work(status: HeatingStatus)
 case object GetStatus
 case object GetTemp
+case object GetWeather
 case class HeatingStatus(status: Status, targetTemp: Option[BigDecimal])
-case class HeatingStatusAll(status: Status, targetTemp: Option[BigDecimal], currentTemp: Option[BigDecimal])
+case class HeatingStatusAll(status: Status, targetTemp: Option[BigDecimal], currentTemp: Option[BigDecimal], outsideTemp: Option[BigDecimal], outlook: Option[String])
 case class CheckAndSetTemp(temp: BigDecimal)
 
 object Status extends Enumeration {
@@ -25,8 +30,11 @@ class Worker extends Actor with ActorLogging {
 	var status: HeatingStatus = HeatingStatus(Status.UNKNOWN, None)
 	var cancellable: Option[Cancellable] = None
 	private var temp: Option[BigDecimal] = None
+	private var outsideTemp: Option[BigDecimal] = None
+	private var outlook: Option[String] = None
 
 	context.system.scheduler.schedule(1 second, 1 minute, self, GetTemp)
+	context.system.scheduler.schedule(4 seconds, 30 minutes, self, GetWeather)
 
 	def receive = {
 		case status : HeatingStatus ⇒ {
@@ -60,19 +68,27 @@ class Worker extends Actor with ActorLogging {
 			}
 
 		case GetStatus =>
-			sender() ! HeatingStatusAll(status.status, status.targetTemp, temp)
+			sender() ! HeatingStatusAll(status.status, status.targetTemp, temp, outsideTemp, outlook)
 
 		// Only called to read the current temp and set variable
 		case GetTemp =>
 			val strTemp = s"/usr/local/bin/temp"!!
 
 			try {
-				this.temp = Some(BigDecimal(strTemp.replace("\n", "")).setScale(2))
+				this.temp = Some(BigDecimal(strTemp.replace("\n", "")).setScale(2, RoundingMode.HALF_UP))
 			} catch {
 				case e: NumberFormatException => {
 					log.error("Number format exception", e)
 				}
 			}
+
+		case GetWeather =>
+			val str = scala.io.Source.fromURL("http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric").mkString
+			val json = parse(str)
+
+			implicit lazy val formats = org.json4s.DefaultFormats
+			(json \ "main" \ "temp").extractOpt[BigDecimal].foreach(value => outsideTemp = Some(value.setScale(2, RoundingMode.HALF_UP)))
+			outlook = (json \ "weather" \ "main").extractOpt[String]
 	}
 
 	private def callCommand(command: String): String = {

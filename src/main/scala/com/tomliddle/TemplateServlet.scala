@@ -56,7 +56,13 @@ class MyServlet extends ScalatraServlet with FutureSupport {
 		new AsyncResult {
 			val is = (myActor ? GetStatus).mapTo[HeatingStatusAll].map {
 				statusAll =>
-					compact(render(JObject("status" -> statusAll.status.toString,"currentTemp" -> statusAll.currentTemp,"targetTemp" -> statusAll.targetTemp)))
+					compact(render(JObject(
+						"status" -> statusAll.status.toString,
+						"currentTemp" -> statusAll.currentTemp,
+						"targetTemp" -> statusAll.targetTemp,
+						"outsideTemp" -> statusAll.outsideTemp,
+						"outlook" -> statusAll.outlook
+					)))
 			}
 		}
 	}
