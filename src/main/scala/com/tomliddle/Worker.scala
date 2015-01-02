@@ -83,12 +83,15 @@ class Worker extends Actor with ActorLogging {
 			}
 
 		case GetWeather =>
-			val str = scala.io.Source.fromURL("http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric").mkString
+			//val str = scala.io.Source.fromURL("http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric").mkString
+			val str = scala.io.Source.fromURL("http://api.wunderground.com/api/33949e36ea94ffcd/conditions/q/GB/London.json").mkString
 			val json = parse(str)
 
 			implicit lazy val formats = org.json4s.DefaultFormats
-			(json \ "main" \ "temp").extractOpt[BigDecimal].foreach(value => outsideTemp = Some(value.setScale(2, RoundingMode.HALF_UP)))
-			outlook = (json \ "weather" \ "main").extractOpt[String]
+			//(json \ "main" \ "temp").extractOpt[BigDecimal].foreach(value => outsideTemp = Some(value.setScale(2, RoundingMode.HALF_UP)))
+			(json \ "current_observation" \ "temp_c").extractOpt[BigDecimal].foreach(value => outsideTemp = Some(value.setScale(2, RoundingMode.HALF_UP)))
+			//outlook = (json \ "weather" \ "main").extractOpt[String]
+			outlook = (json \ "current_observation" \ "weather").extractOpt[String]
 	}
 
 	private def callCommand(command: String): String = {

@@ -32,17 +32,17 @@ class MyServlet extends ScalatraServlet with FutureSupport {
 		redirect("/heating/status")
 	}
 	get("/heating/off") {
-		(myActor ? HeatingStatus(Status.OFF, None))
+		myActor ? HeatingStatus(Status.OFF, None)
 		redirect("/heating/status")
 	}
 	get("/heating/thermostat") {
-		(myActor ? HeatingStatus(Status.THERMOSTAT, None))
+		myActor ? HeatingStatus(Status.THERMOSTAT, None)
 		redirect("/heating/status")
 	}
 	get("/heating/set/:temp") {
 		try {
 			val temp = BigDecimal(params("temp")).setScale(2)
-			(myActor ? HeatingStatus(Status.SET_TO, Some(temp)))
+			myActor ? HeatingStatus(Status.SET_TO, Some(temp))
 		} catch {
 			case e: NumberFormatException => {
 				logger.error("Number format exception", e)

@@ -4,7 +4,7 @@ cd `dirname $0`
 mkdir -p lock
 lockfile=lock/lock
 
-
+export JAVA_OPTS="-Xms300m -Xmx300m -XX:MaxPermSize=100m -XX:ReservedCodeCacheSize=4m -Djava.awt.headless=true"
 
 (
 	flock -n 9 || {
