@@ -1,7 +1,5 @@
 package com.tomliddle
 
-import java.math.MathContext
-
 import akka.actor.{Actor, ActorLogging, Cancellable}
 import com.tomliddle.Status.Status
 import scala.concurrent.ExecutionContext
@@ -39,7 +37,7 @@ class Worker extends Actor with ActorLogging {
 	def receive = {
 		case status : HeatingStatus ⇒ {
 			this.status = status
-			log.debug(s"Scheduled status $status")
+			log.info(s"Scheduled status $status")
 
 			cancellable.foreach(c => c.cancel())
 			cancellable = None
@@ -83,14 +81,12 @@ class Worker extends Actor with ActorLogging {
 			}
 
 		case GetWeather =>
-			//val str = scala.io.Source.fromURL("http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric").mkString
-			val str = scala.io.Source.fromURL("http://api.wunderground.com/api/33949e36ea94ffcd/conditions/q/GB/London.json").mkString
-			val json = parse(str)
+			val src = scala.io.Source.fromURL("http://api.wunderground.com/api/33949e36ea94ffcd/conditions/q/GB/London.json")
+			val json = parse(src.mkString)
+			src.close()
 
 			implicit lazy val formats = org.json4s.DefaultFormats
-			//(json \ "main" \ "temp").extractOpt[BigDecimal].foreach(value => outsideTemp = Some(value.setScale(2, RoundingMode.HALF_UP)))
 			(json \ "current_observation" \ "temp_c").extractOpt[BigDecimal].foreach(value => outsideTemp = Some(value.setScale(2, RoundingMode.HALF_UP)))
-			//outlook = (json \ "weather" \ "main").extractOpt[String]
 			outlook = (json \ "current_observation" \ "weather").extractOpt[String]
 	}
 
@@ -99,7 +95,7 @@ class Worker extends Actor with ActorLogging {
 
 		if (ret == 0) {
 			val text = s"$command successful"
-			log.debug(text)
+			log.info(text)
 			text
 		}
 		else {
