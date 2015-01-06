@@ -30,6 +30,7 @@ class Worker extends Actor with ActorLogging {
 	private var temp: Option[BigDecimal] = None
 	private var outsideTemp: Option[BigDecimal] = None
 	private var outlook: Option[String] = None
+	private var demandOn: Option[Boolean] = None // TODO - check before turning heating on/off
 
 	context.system.scheduler.schedule(1 second, 1 minute, self, GetTemp)
 	context.system.scheduler.schedule(4 seconds, 30 minutes, self, GetWeather)
