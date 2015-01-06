@@ -14,4 +14,4 @@ rsync -avz --delete --rsh="ssh -p $port"  build/libs/ ${username}@${server}:${pr
 echo ""
 echo "Rsynced with ${username}@${server}:${projectPath}"
 echo "Starting $projectPath"
-ssh -p $port -n ${username}@${server} "cd $projectPath; ./$startupScript; > /dev/null"
+ssh -p $port -n ${username}@${server} "cd $projectPath; ./$startupScript > /dev/null"
