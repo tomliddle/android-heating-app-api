@@ -45,48 +45,31 @@ class Worker extends Actor with ActorLogging {
 
 			status.status match {
 				case Status.OFF =>
-					burnerOn = Some(false)
-					sender() ! callCommand("heating_off")
+					setBurnerOff()
 				case Status.ON =>
-					burnerOn = Some(true)
-					sender() ! callCommand("heating_on")
+					setBurnerOn()
 				case Status.THERMOSTAT =>
 					burnerOn = None
-					sender() ! callCommand("heating_thermostat")
+					callCommand("heating_thermostat")
 				case Status.SET_TO =>
+					//log.debug(s"Setting temp to $targetTemp")
 					cancellable = Some(context.system.scheduler.schedule(10 seconds, 5 minutes, self, CheckAndSetTemp(status.targetTemp.get)))
-					sender() ! s"setting thermostat to ${status.targetTemp.get}"
 			}
 		}
 
 		case CheckAndSetTemp(targetTemp: BigDecimal) =>
-
 			currentTemp match {
 				case Some(currTemp) =>
-					log.debug(s"Setting temp to $targetTemp")
-
 					burnerOn match {
 						// We have a burner status
 						case Some(burnOn) =>
-							if (burnOn && currTemp > targetTemp) {
-								burnerOn = Some(false)
-								callCommand("heating_off")
-							}
-							else if (!burnOn && currTemp < targetTemp) {
-								burnerOn = Some(true)
-								callCommand("heating_on")
-							}
+							if (burnOn && currTemp > targetTemp) setBurnerOff()
+							else if (!burnOn && currTemp < targetTemp) setBurnerOn()
 
 						// We don't have a burner status
 						case None =>
-							if (currTemp < targetTemp) {
-								burnerOn = Some(true)
-								callCommand("heating_on")
-							}
-							else {
-								burnerOn = Some(false)
-								callCommand("heating_off")
-							}
+							if (currTemp < targetTemp) setBurnerOn()
+							else setBurnerOff()
 					}
 
 				case None =>
@@ -116,6 +99,16 @@ class Worker extends Actor with ActorLogging {
 			implicit lazy val formats = org.json4s.DefaultFormats
 			(json \ "current_observation" \ "temp_c").extractOpt[BigDecimal].foreach(value => outsideTemp = Some(value.setScale(2, RoundingMode.HALF_UP)))
 			outlook = (json \ "current_observation" \ "weather").extractOpt[String]
+	}
+
+	private def setBurnerOn() {
+		burnerOn = Some(true)
+		callCommand("heating_on")
+	}
+
+	private def setBurnerOff() {
+		burnerOn = Some(false)
+		callCommand("heating_off")
 	}
 
 	private def callCommand(command: String): String = {
