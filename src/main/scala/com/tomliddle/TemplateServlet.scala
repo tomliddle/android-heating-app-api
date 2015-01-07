@@ -2,7 +2,7 @@ package com.tomliddle
 
 import java.io.File
 import java.util.concurrent.TimeUnit
-import _root_.akka.actor.{ActorSystem, Props}
+import _root_.akka.actor.{ActorRef, ActorSystem, Props}
 import akka.util.Timeout
 import org.scalatra._
 import org.slf4j.LoggerFactory
@@ -13,7 +13,7 @@ import org.json4s.jackson.JsonMethods._
 import scala.concurrent.ExecutionContext
 
 
-class MyServlet extends ScalatraServlet with FutureSupport {
+class MyServlet(system: ActorSystem, myActor: ActorRef) extends ScalatraServlet with FutureSupport {
 
 	protected implicit val timeout = Timeout(5, TimeUnit.SECONDS)
 	protected implicit val jsonFormats: Formats = DefaultFormats
@@ -22,9 +22,6 @@ class MyServlet extends ScalatraServlet with FutureSupport {
 	import _root_.akka.pattern.ask
 
 	private val logger = LoggerFactory.getLogger(getClass)
-	private val system = ActorSystem("actor_system")
-	private val myActor = system.actorOf(Props[Worker])
-
 
 	get("/heating/on") {
 		// Should have async result here really

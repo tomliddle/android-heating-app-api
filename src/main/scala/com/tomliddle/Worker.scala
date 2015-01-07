@@ -27,10 +27,10 @@ class Worker extends Actor with ActorLogging {
 	implicit val ec = ExecutionContext.Implicits.global
 	var status: HeatingStatus = HeatingStatus(Status.UNKNOWN, None)
 	var cancellable: Option[Cancellable] = None
-	private var temp: Option[BigDecimal] = None
+	private var currentTemp: Option[BigDecimal] = None
 	private var outsideTemp: Option[BigDecimal] = None
 	private var outlook: Option[String] = None
-	private var demandOn: Option[Boolean] = None // TODO - check before turning heating on/off
+	private var burnerOn: Option[Boolean] = None
 
 	context.system.scheduler.schedule(1 second, 1 minute, self, GetTemp)
 	context.system.scheduler.schedule(4 seconds, 30 minutes, self, GetWeather)
@@ -45,10 +45,13 @@ class Worker extends Actor with ActorLogging {
 
 			status.status match {
 				case Status.OFF =>
+					burnerOn = Some(false)
 					sender() ! callCommand("heating_off")
 				case Status.ON =>
+					burnerOn = Some(true)
 					sender() ! callCommand("heating_on")
 				case Status.THERMOSTAT =>
+					burnerOn = None
 					sender() ! callCommand("heating_thermostat")
 				case Status.SET_TO =>
 					cancellable = Some(context.system.scheduler.schedule(10 seconds, 5 minutes, self, CheckAndSetTemp(status.targetTemp.get)))
@@ -57,24 +60,48 @@ class Worker extends Actor with ActorLogging {
 		}
 
 		case CheckAndSetTemp(targetTemp: BigDecimal) =>
-			temp match {
-				case Some(currentTemp) =>
+
+			currentTemp match {
+				case Some(currTemp) =>
 					log.debug(s"Setting temp to $targetTemp")
-					if (currentTemp < targetTemp) callCommand(s"heating_on")
-					else callCommand(s"heating_off")
+
+					burnerOn match {
+						// We have a burner status
+						case Some(burnOn) =>
+							if (burnOn && currTemp > targetTemp) {
+								burnerOn = Some(false)
+								callCommand("heating_off")
+							}
+							else if (!burnOn && currTemp < targetTemp) {
+								burnerOn = Some(true)
+								callCommand("heating_on")
+							}
+
+						// We don't have a burner status
+						case None =>
+							if (currTemp < targetTemp) {
+								burnerOn = Some(true)
+								callCommand("heating_on")
+							}
+							else {
+								burnerOn = Some(false)
+								callCommand("heating_off")
+							}
+					}
+
 				case None =>
 					log.error("No current temperature found, cannot set")
 			}
 
 		case GetStatus =>
-			sender() ! HeatingStatusAll(status.status, status.targetTemp, temp, outsideTemp, outlook)
+			sender() ! HeatingStatusAll(status.status, status.targetTemp, currentTemp, outsideTemp, outlook)
 
 		// Only called to read the current temp and set variable
 		case GetTemp =>
 			val strTemp = s"/usr/local/bin/temp"!!
 
 			try {
-				this.temp = Some(BigDecimal(strTemp.replace("\n", "")).setScale(2, RoundingMode.HALF_UP))
+				this.currentTemp = Some(BigDecimal(strTemp.replace("\n", "")).setScale(2, RoundingMode.HALF_UP))
 			} catch {
 				case e: NumberFormatException => {
 					log.error("Number format exception", e)
