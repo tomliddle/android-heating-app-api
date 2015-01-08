@@ -26,12 +26,15 @@ class MyServlet(system: ActorSystem, myActor: ActorRef) extends ScalatraServlet 
 	get("/heating/on") {
 		// Should have async result here really
 		myActor ! HeatingStatus(Status.ON, None)
+		""
 	}
 	get("/heating/off") {
 		myActor ! HeatingStatus(Status.OFF, None)
+		""
 	}
 	get("/heating/thermostat") {
 		myActor ! HeatingStatus(Status.THERMOSTAT, None)
+		""
 	}
 	get("/heating/set/:temp") {
 		try {
@@ -42,7 +45,7 @@ class MyServlet(system: ActorSystem, myActor: ActorRef) extends ScalatraServlet 
 				logger.error("Number format exception", e)
 			}
 		}
-
+		""
 	}
 	get("/heating/status") {
 		contentType = "application/json"
