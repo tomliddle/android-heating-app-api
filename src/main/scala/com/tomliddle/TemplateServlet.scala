@@ -25,27 +25,24 @@ class MyServlet(system: ActorSystem, myActor: ActorRef) extends ScalatraServlet 
 
 	get("/heating/on") {
 		// Should have async result here really
-		myActor ? HeatingStatus(Status.ON, None)
-		redirect("/heating/status")
+		myActor ! HeatingStatus(Status.ON, None)
 	}
 	get("/heating/off") {
-		myActor ? HeatingStatus(Status.OFF, None)
-		redirect("/heating/status")
+		myActor ! HeatingStatus(Status.OFF, None)
 	}
 	get("/heating/thermostat") {
-		myActor ? HeatingStatus(Status.THERMOSTAT, None)
-		redirect("/heating/status")
+		myActor ! HeatingStatus(Status.THERMOSTAT, None)
 	}
 	get("/heating/set/:temp") {
 		try {
 			val temp = BigDecimal(params("temp")).setScale(2)
-			myActor ? HeatingStatus(Status.SET_TO, Some(temp))
+			myActor ! HeatingStatus(Status.SET_TO, Some(temp))
 		} catch {
 			case e: NumberFormatException => {
 				logger.error("Number format exception", e)
 			}
 		}
-		redirect("/heating/status")
+
 	}
 	get("/heating/status") {
 		contentType = "application/json"

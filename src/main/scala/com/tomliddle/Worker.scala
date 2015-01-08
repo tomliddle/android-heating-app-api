@@ -49,8 +49,7 @@ class Worker extends Actor with ActorLogging {
 				case Status.ON =>
 					setBurnerOn()
 				case Status.THERMOSTAT =>
-					burnerOn = None
-					callCommand("heating_thermostat")
+					setToThermostat()
 				case Status.SET_TO =>
 					//log.debug(s"Setting temp to $targetTemp")
 					cancellable = Some(context.system.scheduler.schedule(10 seconds, 5 minutes, self, CheckAndSetTemp(status.targetTemp.get)))
@@ -109,6 +108,11 @@ class Worker extends Actor with ActorLogging {
 	private def setBurnerOff() {
 		burnerOn = Some(false)
 		callCommand("heating_off")
+	}
+
+	private def setToThermostat() {
+		burnerOn = None
+		callCommand("heating_thermostat")
 	}
 
 	private def callCommand(command: String): String = {

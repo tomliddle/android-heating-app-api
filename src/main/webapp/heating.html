@@ -27,11 +27,13 @@
 				});
 				$.support.cors = true;
 
-				var renderData = function(data) {
-					var $template = $('#template').html();
-					Mustache.parse($template);
-					var rendered = Mustache.render($template, data);
-					$('#target').html(rendered);
+				var update = function() {
+					$.get("/heating/status", function(data) {
+						var $template = $('#template').html();
+						Mustache.parse($template);
+						var rendered = Mustache.render($template, data);
+						$('#target').html(rendered);
+					});
 				};
 
     			$("#targetTempButton").click(function(evt) {
@@ -39,8 +41,8 @@
 					if (confirm("Are you sure?")) {
 						var temp = $("#targetTemp").val();
 						if ($.isNumeric(temp)) {
-							$.get(this.href + temp, function (data) {
-								renderData(data);
+							$.get(this.href + temp, function () {
+								update();
 							});
 						}
 					}
@@ -49,15 +51,13 @@
 				$(".renderHandler").click(function(evt) {
 					evt.preventDefault();
 					if (confirm("Are you sure?")) {
-						$.get(this.href, function (data) {
-							renderData(data);
+						$.get(this.href, function () {
+							update();
 						});
 					}
 				});
 
-				$.get("/heating/status", function(data) {
-					renderData(data);
-				});
+				update();
 			});
 		</script>
 </head>
