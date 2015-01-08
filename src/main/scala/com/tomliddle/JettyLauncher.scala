@@ -13,7 +13,7 @@ object JettyLauncher { // this is my entry object as specified in sbt project de
 		val port = 8080
 
 		val threadPool = new QueuedThreadPool
-		threadPool.setMaxThreads(5)
+		threadPool.setMaxThreads(3)
 		val server = new Server(threadPool)
 
 		// Extra options
