@@ -13,7 +13,7 @@ object JettyLauncher { // this is my entry object as specified in sbt project de
 		val port = 8080
 
 		val threadPool = new QueuedThreadPool
-		threadPool.setMaxThreads(30)
+		threadPool.setMaxThreads(5)
 		val server = new Server(threadPool)
 
 		// Extra options
@@ -50,7 +50,7 @@ object JettyLauncher { // this is my entry object as specified in sbt project de
 		// Server connector
 		val http = new ServerConnector(server, new HttpConnectionFactory(http_config))
 		http.setPort(port)
-		http.setIdleTimeout(20000)
+		http.setIdleTimeout(5000)
 		server.addConnector(http)
 
 		// Status handler
