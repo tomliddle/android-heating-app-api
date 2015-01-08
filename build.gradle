@@ -51,7 +51,7 @@ dependencies {
 
     compile group: 'org.scala-lang', name: 'scala-library', version: '2.10'
     compile 'com.typesafe.akka:akka-actor_2.10:2.3.7'
-	compile 'org.eclipse.jetty:jetty-webapp:9.3.0.M1'
+	compile 'org.eclipse.jetty:jetty-webapp:9.2.6.v20141205'
 
 	// scalatra deps
     compile group: 'org.scalatra', name: 'scalatra_2.10', version: '2.3.0'
