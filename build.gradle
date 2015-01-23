@@ -109,7 +109,7 @@ task dist(type: Jar) {
 	dependsOn(copyToLib)
 }
 
-task release(type: Exec) {
+task release(dependsOn: dist, type: Exec) {
     executable "bash"
     args "-c", "./release.sh"
 
