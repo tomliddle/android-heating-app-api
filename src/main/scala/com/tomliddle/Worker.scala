@@ -32,8 +32,14 @@ class Worker extends Actor with ActorLogging {
 	private var outlook: Option[String] = None
 	private var burnerOn: Option[Boolean] = None
 
-	context.system.scheduler.schedule(1 second, 1 minute, self, GetTemp)
-	context.system.scheduler.schedule(4 seconds, 30 minutes, self, GetWeather)
+	val getTempTimer = context.system.scheduler.schedule(1 second, 1 minute, self, GetTemp)
+	val getWeatherTimer = context.system.scheduler.schedule(4 seconds, 30 minutes, self, GetWeather)
+
+	override def postStop() = {
+		getTempTimer.cancel()
+		getWeatherTimer.cancel()
+		cancellable.foreach(c => c.cancel())
+	}
 
 	def receive = {
 		case status : HeatingStatus ⇒ {
@@ -51,12 +57,15 @@ class Worker extends Actor with ActorLogging {
 				case Status.THERMOSTAT =>
 					setToThermostat()
 				case Status.SET_TO =>
-					//log.debug(s"Setting temp to $targetTemp")
-					cancellable = Some(context.system.scheduler.schedule(10 seconds, 5 minutes, self, CheckAndSetTemp(status.targetTemp.get)))
+					log.info(s"Setting temp to $status.targetTemp.get")
+					status.targetTemp.foreach { targetTemp =>
+						cancellable = Some(context.system.scheduler.schedule(10 seconds, 5 minutes, self, CheckAndSetTemp(targetTemp)))
+					}
 			}
 		}
 
 		case CheckAndSetTemp(targetTemp: BigDecimal) =>
+			log.info(s"checking and setting temp target= $targetTemp curr temp $currentTemp")
 			currentTemp match {
 				case Some(currTemp) =>
 					burnerOn match {
@@ -98,6 +107,7 @@ class Worker extends Actor with ActorLogging {
 			implicit lazy val formats = org.json4s.DefaultFormats
 			(json \ "current_observation" \ "temp_c").extractOpt[BigDecimal].foreach(value => outsideTemp = Some(value.setScale(2, RoundingMode.HALF_UP)))
 			outlook = (json \ "current_observation" \ "weather").extractOpt[String]
+			log.info(s"outlook is $outlook")
 	}
 
 	private def setBurnerOn() {
