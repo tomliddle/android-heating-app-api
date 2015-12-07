@@ -28,7 +28,7 @@
 				$.support.cors = true;
 
 				var update = function() {
-					$.get("/heating/status", function(data) {
+					$.get("/api/status", function(data) {
 						var $template = $('#template').html();
 						Mustache.parse($template);
 						var rendered = Mustache.render($template, data);
@@ -41,9 +41,11 @@
 					if (confirm("Are you sure?")) {
 						var temp = $("#targetTemp").val();
 						if ($.isNumeric(temp)) {
-							$.get(this.href + temp, function () {
-								update();
-							});
+							$.ajax({
+								method: 'PUT',
+								url: this.href + temp
+							})
+							.done(update);
 						}
 					}
     			});
@@ -51,9 +53,10 @@
 				$(".renderHandler").click(function(evt) {
 					evt.preventDefault();
 					if (confirm("Are you sure?")) {
-						$.get(this.href, function () {
-							update();
-						});
+						$.ajax({
+							method: 'PUT',
+							url: this.href
+						}).done(update);
 					}
 				});
 
@@ -96,11 +99,11 @@
 		<div class="row">
 			<div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 ">
 				<div class="form-group"><input type="number" min="0" max="25" class="form-control" id="targetTemp" value="19"></div>
-				<div class="form-group"><a class="btn btn-primary btn-block" href="/heating/set/" id="targetTempButton" href="#">Set temp...</a></div>
-				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/on">Turn on</a></div>
-				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/off">Turn off</a></div>
-				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/thermostat">Set to thermostat</a></div>
-				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/heating/status">Refresh</a></div>
+				<div class="form-group"><a class="btn btn-primary btn-block" href="/api/set/" id="targetTempButton" href="#">Set temp...</a></div>
+				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/api/on">Turn on</a></div>
+				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/api/off">Turn off</a></div>
+				<div class="form-group"><a class="btn btn-primary btn-block renderHandler" href="/api/thermostat">Set to thermostat</a></div>
+				<div class="form-group"><a class="btn btn-primary btn-block" href="/">Refresh</a></div>
 			</div>
 		</div>
 

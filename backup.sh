@@ -1,8 +1,8 @@
 #!/bin/bash
 
-username=tom
-projectPath=/home/tom/Projects/HomeAutomationRest
-server=tomliddle.asuscomm.com
+username=username
+projectPath=~/Projects/AndroidHeatingAppApi
+server=server
 port=40
 
 echo "Rsyncing with ${username}@${server}:${projectPath}"

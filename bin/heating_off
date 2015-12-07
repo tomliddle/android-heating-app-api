@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/usr/sbin/i2cset -y 1 0x32 10 1 0 1 i
+/usr/sbin/i2cset -y 1 0x32 11 0 0 1 i

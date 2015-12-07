@@ -1,8 +1,8 @@
 #!/bin/bash
 
 username=tom
-projectPath=/home/tom/Server/HomeAutomationRest
-server=tomliddle.asuscomm.com
+projectPath=/home/tom/Server/AndroidHeatingAppApi
+server=server
 port=40
 startupScript=start.sh
 shutdownScript=stop.sh

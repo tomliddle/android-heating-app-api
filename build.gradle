@@ -7,8 +7,6 @@ apply plugin: 'application'
 // jetty runner class
 mainClassName = 'com.tomliddle.JettyLauncher'
 
-
-
 version = '1.0'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -25,13 +23,12 @@ configurations.all {
 
 // add provided scope to source compilation
 sourceSets {
-    main { 
-        compileClasspath += configurations.provided 
+    main {
+        compileClasspath += configurations.provided
         runtimeClasspath += configurations.provided
-		//resources.srcDir 'src/main/webapp'
     }
-    test { 
-        compileClasspath += configurations.provided 
+    test {
+        compileClasspath += configurations.provided
         runtimeClasspath += configurations.provided
     }
 }
@@ -42,29 +39,26 @@ repositories {
 
 dependencies {
 
-    compile 'ch.qos.logback:logback-classic:1.0.13'
-	compile 'com.typesafe.akka:akka-slf4j_2.10:2.3.7'
+    def scalaVersion = '2.10.3'
+    compile group: 'org.scala-lang', name: 'scala-compiler', version: scalaVersion
+    compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
+    compile group: 'org.scala-lang', name: 'scala-reflect', version: scalaVersion
 
-	//compile 'org.slf4j:log4j-over-slf4j:1.7.5'
-    // Bridge commons logging over slf4j - note exclusion within the configurations
-    //compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.6.6'
+    compile 'ch.qos.logback:logback-classic:1.0.13'
+    compile 'com.typesafe.akka:akka-slf4j_2.10:2.3.7'
 
     compile group: 'org.scala-lang', name: 'scala-library', version: '2.10'
     compile 'com.typesafe.akka:akka-actor_2.10:2.3.7'
-	compile 'org.eclipse.jetty:jetty-webapp:9.2.6.v20141205'
+    compile 'org.eclipse.jetty:jetty-webapp:9.2.6.v20141205'
 
-	// scalatra deps
+    // scalatra deps
     compile group: 'org.scalatra', name: 'scalatra_2.10', version: '2.3.0'
-    //compile group: 'org.scalatra', name: 'scalatra-scalate_2.10', version: '2.3.0'
-	//compile 'org.scalatra:scalatra-json_2.10:2.4.0.M2'
-	compile 'org.json4s:json4s-jackson_2.10:3.2.11'
-
-	//runtime "org.codehaus.groovy:groovy:1.8.6"
+    compile 'org.json4s:json4s-jackson_2.10:3.2.11'
 }
 
 // manually specify gradle version for gradlew
 task wrapper(type: Wrapper) {
-    distributionUrl = "http://services.gradle.org/distributions/gradle-2.0-bin.zip" 
+    gradleVersion = '2.5'
 }
 
 
@@ -76,13 +70,13 @@ task copyResourcesToLib(type: Copy) {
 }
 
 task copyToLib(type: Copy) {
-	into "$buildDir/libs"
-	from {
-		configurations.runtime
-	}
-	from {
-		'bin'
-	}
+    into "$buildDir/libs"
+    from {
+        configurations.runtime
+    }
+    from {
+        'bin'
+    }
     dependsOn(copyResourcesToLib)
 }
 
@@ -90,23 +84,23 @@ task localDevelopment(type: Copy) {
     from configurations.runtime {
         into "lib"
     }
-    //from resources.srcDir 'src/main/webapp'
+
 }
 
 task dist(type: Jar) {
-	manifest {
-		manifest {
-			attributes(
-					"Main-Class": mainClassName,
-					"Class-Path": "."
-			)
-		}
-	}
+    manifest {
+        manifest {
+            attributes(
+                    "Main-Class": mainClassName,
+                    "Class-Path": "."
+            )
+        }
+    }
 
-	// We want all the libs
-	from sourceSets.main.output
-	archiveName='HomeAutomationRest.jar'
-	dependsOn(copyToLib)
+    // We want all the libs
+    from sourceSets.main.output
+    archiveName='HomeAutomationRest.jar'
+    dependsOn(copyToLib)
 }
 
 task release(dependsOn: dist, type: Exec) {
@@ -125,5 +119,3 @@ idea {
         scopes.PROVIDED.plus += [ configurations.provided ]
     }
 }
-
-//java -cp HomeAutomationRest-1.0-fatJar.jar:* com.tomliddle.JettyLauncher
