@@ -1,42 +1,44 @@
-package com.tomliddle
+package com.tomliddle.controllers
 
 import java.io.File
 import java.util.concurrent.TimeUnit
-import _root_.akka.actor.{ActorRef, ActorSystem, Props}
+
+import _root_.akka.actor.{ActorRef, ActorSystem}
+import _root_.akka.pattern.ask
 import akka.util.Timeout
+import com.tomliddle.actors.HeatingActor.{HeatingStatusAll, GetStatus, HeatingStatus}
+import com.tomliddle.actors.WeatherActor.{GetWeatherStatus, WeatherStatus}
 import com.tomliddle.entity._
+import org.json4s.JsonDSL._
+import org.json4s._
+import org.json4s.jackson.JsonMethods._
 import org.scalatra._
 import org.slf4j.LoggerFactory
-import org.json4s._
-import org.json4s.JsonDSL._
-import org.json4s.jackson.JsonMethods._
 
-import scala.concurrent.{Future, ExecutionContext}
-import _root_.akka.pattern.ask
+import scala.concurrent.ExecutionContext
 
 /**
 	* Very simple API for getting and setting heating and weather information
-	* @param system
 	* @param heatingActor
 	*/
-class HeatingServlet(system: ActorSystem, heatingActor: ActorRef, weatherActor: ActorRef) extends ScalatraServlet with FutureSupport {
+class HeatingController(heatingActor: ActorRef, weatherActor: ActorRef) extends ScalatraServlet with FutureSupport {
 
 	private val logger = LoggerFactory.getLogger(getClass)
 	protected implicit val jsonFormats: Formats = DefaultFormats
-	protected implicit def executor: ExecutionContext = system.dispatcher
+	protected implicit def executor = ExecutionContext.Implicits.global
 
 
 	put("/api/on") {
 		heatingActor ! HeatingStatus(Status.ON, None)
-		Ok("OK")
+		Ok
 	}
 	put("/api/off") {
 		heatingActor ! HeatingStatus(Status.OFF, None)
-		Ok("OK")
+		Ok
 	}
 	put("/api/thermostat") {
 		heatingActor ! HeatingStatus(Status.THERMOSTAT, None)
-		Ok("OK")
+		Ok
 	}
 	put("/api/set/:temp") {
 		try {
@@ -47,7 +49,7 @@ class HeatingServlet(system: ActorSystem, heatingActor: ActorRef, weatherActor: 
 				logger.error("Number format exception", e)
 
 		}
-		Ok("OK")
+		Ok
 	}
 	get("/api/status") {
 		contentType = "application/json"

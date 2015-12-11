@@ -1,11 +1,25 @@
-package com.tomliddle
+package com.tomliddle.actors
 
 import akka.actor.{Actor, ActorLogging, Cancellable}
+import com.tomliddle.actors.HeatingActor._
+import com.tomliddle.entity.Status.Status
 import com.tomliddle.entity._
+
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.math.BigDecimal.RoundingMode
 import scala.sys.process._
+
+object HeatingActor {
+	case object GetStatus
+	case object GetTemp
+
+	case class HeatingStatus(status: Status, targetTemp: Option[BigDecimal])
+	case class HeatingStatusAll(status: Status, targetTemp: Option[BigDecimal], currentTemp: Option[BigDecimal])
+
+	private case class CheckAndSetTemp(temp: BigDecimal)
+
+}
 
 /**
 	* Actor to get/set heating settings
@@ -15,14 +29,14 @@ class HeatingActor extends Actor with ActorLogging {
 	implicit val ec = ExecutionContext.Implicits.global
 	private var status: HeatingStatus = HeatingStatus(Status.UNKNOWN, None)
 
-	private var currentTemp: Option[BigDecimal] = None
+	protected var currentTemp: Option[BigDecimal] = None
 	private var burnerOn: Option[Boolean] = None
 
 	// Read the temperature from the USB thermometer at specified intervals
 	private val readTempTimer: Cancellable = context.system.scheduler.schedule(1 second, 1 minute, self, GetTemp)
 
 	// The heating state has a timer to avoid cycling the heating on and off too often.
-	private var heatingStateTimer: Option[Cancellable] = None
+	var heatingStateTimer: Option[Cancellable] = None
 
 	override def postStop() = {
 		readTempTimer.cancel()
@@ -95,17 +109,17 @@ class HeatingActor extends Actor with ActorLogging {
 
 	private def setBurnerOn() {
 		burnerOn = Some(true)
-		callCommand("heating_on")
+		callCommand("bin/heating_on")
 	}
 
 	private def setBurnerOff() {
 		burnerOn = Some(false)
-		callCommand("heating_off")
+		callCommand("bin/heating_off")
 	}
 
 	private def setToThermostat() {
 		burnerOn = None
-		callCommand("heating_thermostat")
+		callCommand("bin/heating_thermostat")
 	}
 
 	/**

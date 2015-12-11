@@ -2,4 +2,3 @@
 
 # Note this should be replaced with a call to the pcsensor executable path
 echo "19"
-#./pcsensor -c

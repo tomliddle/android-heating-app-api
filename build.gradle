@@ -1,5 +1,4 @@
 apply plugin: 'scala'
-apply plugin: 'idea'
 apply plugin: 'war'
 apply plugin: 'java'
 apply plugin: 'application'
@@ -44,19 +43,23 @@ dependencies {
     compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
     compile group: 'org.scala-lang', name: 'scala-reflect', version: scalaVersion
 
-    compile 'ch.qos.logback:logback-classic:1.0.13'
-    compile 'com.typesafe.akka:akka-slf4j_2.10:2.3.7'
+    compile 'com.typesafe.scala-logging:scala-logging-slf4j_2.10:2.1.2'
 
-    compile group: 'org.scala-lang', name: 'scala-library', version: '2.10'
-    compile 'com.typesafe.akka:akka-actor_2.10:2.3.7'
+    def akkaVersion = '2.3.7'
+    compile 'com.typesafe.akka:akka-slf4j_2.10:' + akkaVersion
+    compile 'com.typesafe.akka:akka-actor_2.10:' + akkaVersion
+
     compile 'org.eclipse.jetty:jetty-webapp:9.2.6.v20141205'
 
     // scalatra deps
     compile group: 'org.scalatra', name: 'scalatra_2.10', version: '2.3.0'
     compile 'org.json4s:json4s-jackson_2.10:3.2.11'
+
+    testCompile 'org.scalatra:scalatra-scalatest_2.10:2.3.1'
+    testCompile 'org.mockito:mockito-core:1.9.5'
+    testCompile group: 'com.typesafe.akka', name: 'akka-testkit_2.10', version: akkaVersion
 }
 
-// manually specify gradle version for gradlew
 task wrapper(type: Wrapper) {
     gradleVersion = '2.5'
 }
@@ -81,9 +84,10 @@ task copyToLib(type: Copy) {
 }
 
 task localDevelopment(type: Copy) {
-    from configurations.runtime {
-        into "lib"
-    }
+    into "lib"
+    from configurations.runtime
+    from configurations.testCompile
+
 
 }
 
@@ -99,7 +103,7 @@ task dist(type: Jar) {
 
     // We want all the libs
     from sourceSets.main.output
-    archiveName='HomeAutomationRest.jar'
+    archiveName='AndroidHeatingAppApi.jar'
     dependsOn(copyToLib)
 }
 
@@ -108,14 +112,4 @@ task release(dependsOn: dist, type: Exec) {
     args "-c", "./release.sh"
 
     dependsOn(dist)
-}
-
-
-
-idea {
-    module {
-        downloadJavadoc = true
-        downloadSources = true
-        scopes.PROVIDED.plus += [ configurations.provided ]
-    }
 }
