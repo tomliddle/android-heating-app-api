@@ -3,13 +3,11 @@ package com.tomliddle.actors
 import akka.actor.ActorSystem
 import akka.pattern.ask
 import akka.testkit.{DefaultTimeout, ImplicitSender, TestActorRef, TestKit}
-import com.tomliddle.actors.HeatingActor
 import com.tomliddle.actors.WeatherActor.{WeatherStatus, GetWeatherStatus}
-import com.tomliddle.entity._
 import org.joda.time.DateTime
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, WordSpecLike}
 
-import scala.util.Success
+import scala.util.{Failure, Success}
 
 class WeatherActorSpec extends TestKit(ActorSystem("WeatherActorSpec"))
 with DefaultTimeout
@@ -30,9 +28,9 @@ with BeforeAndAfterAll {
 			actorRef ! WeatherActor.CallWeatherURL
 
 			val heatingStatusFut = actorRef ? GetWeatherStatus
-			val Success(result: WeatherStatus) = heatingStatusFut.value.get
+			val result = heatingStatusFut.value.get
 
-			result should be(WeatherStatus(Some(14), Some("Windy")))
+			result should be(Success(WeatherStatus(Some(14), Some("Windy"))))
 
 		}
 	}

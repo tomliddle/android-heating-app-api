@@ -2,7 +2,6 @@ package com.tomliddle
 
 import org.eclipse.jetty.server._
 import org.eclipse.jetty.servlet.DefaultServlet
-import org.eclipse.jetty.util.thread.QueuedThreadPool
 import org.eclipse.jetty.webapp.WebAppContext
 import org.scalatra.servlet.ScalatraListener
 

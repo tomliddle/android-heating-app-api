@@ -77,5 +77,10 @@ class HeatingController(heatingActor: ActorRef, weatherActor: ActorRef) extends 
 		contentType="text/html"
 		new File("src/main/webapp/heating.html")
 	}
+
+	// Use the default scalatra 404 handler
+	notFound {
+		resourceNotFound()
+	}
 }
 

@@ -1,2 +1,4 @@
 #!/bin/bash
 
+# Script to set the system to thermostatic control at the specified temperature.
+# For testing purposes this script is left blank as there is no feedback from the relay switch

@@ -4,5 +4,6 @@
 /lib
 /logfile.log
 **/.DS_Store
+._.DS_Store
 /.idea
 AndroidHeatingAppApi.iml
