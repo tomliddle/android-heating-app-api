@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# Script to get the current temperature
-# For testing purposes this script is left blank as there is no feedback from the relay switch
-# Note this should be replaced with a call to the pcsensor executable path
-echo "19"

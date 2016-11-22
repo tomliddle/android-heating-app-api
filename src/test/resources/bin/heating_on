@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# Script to turn the heating on.
-# For testing purposes this script is left blank as there is no feedback from the relay switch

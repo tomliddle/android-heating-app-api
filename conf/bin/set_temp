@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]
+then
+  echo "Usage: enter temperature like: set_temp 19"
+  exit 1
+fi
+target=$1
+
+temp=`/usr/local/bin/temp`
+if [ "$temp" = "Could not claim interface" ]; then
+	echo $temp
+	exit
+fi
+
+echo "temperature is $temp target is $target"
+bTurnOn=`echo $temp'<'$target | bc`
+
+if [ "$bTurnOn" = 1 ]; then
+	. /usr/local/bin/heating_on
+	echo "heating_on $?"
+else
+	. /usr/local/bin/heating_off
+	echo "heating_off $?"
+fi  
